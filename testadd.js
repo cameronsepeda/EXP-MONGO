@@ -77,14 +77,36 @@ app.get('/register', (req, res) => {
   `);
 });
 
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
   // Retrieve registration information from the request body
   const { username, password } = req.body;
   
-  // Perform registration logic here (e.g., save user to database)
-  // For demonstration purposes, simply set an authentication cookie
-  res.cookie('authenticated', true);
-  res.redirect('/');
+  try {
+    // Connect to the MongoDB database
+    await client.connect();
+    console.log('Connected to MongoDB');
+
+    // Access the database and collection
+    const db = client.db(dbName);
+    const usersCollection = db.collection('credentials');
+
+    // Check if the username already exists in the database
+    const existingUser = await usersCollection.findOne({ username });
+    if (existingUser) {
+      // If username already exists, send a message indicating the conflict
+      res.status(409).send('Username already exists. Please choose a different one.');
+    } else {
+      // If username does not exist, insert the new user into the database
+      await usersCollection.insertOne({ username, password });
+      // Set authentication cookie for the new user
+      res.cookie('authenticated', true);
+      // Redirect to the default route
+      res.redirect('/');
+    }
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.get('/', (req, res) => {
