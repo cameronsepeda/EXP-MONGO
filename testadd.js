@@ -25,12 +25,13 @@ app.get('/', (req, res) => {
     res.send(`
       <h1>Welcome to the site!</h1>
       <p>Please login or register</p>
-      <form action="/login" method="POST">
+      <a href="/login">
         <button type="submit">Login</button>
-      </form>
-      <form action="/register" method="POST">
+      </a>
+      <a href="/register">
         <button type="submit">Register</button>
-      </form>
+      </a>
+      <br>
       <a href="/all-cookies">View All Cookies</a><br>
       <a href="/clear-cookies">Clear Cookies</a>
     `);
@@ -41,12 +42,13 @@ app.get('/', (req, res) => {
   res.send(`
     <h1>Welcome to the site!</h1>
     <p>Please login or register</p>
-    <form action="/login" method="POST">
+    <a href="/login">
       <button type="submit">Login</button>
-    </form>
-    <form action="/register" method="POST">
+    </a>
+    <a href="/register">
       <button type="submit">Register</button>
-    </form>
+    </a>
+    <br>
     <a href="/all-cookies">View All Cookies</a><br>
     <a href="/clear-cookies">Clear Cookies</a>
   `);
@@ -60,6 +62,7 @@ app.get('/login', (req, res) => {
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Login</button>
     </form>
+    <br>
     <a href="/all-cookies">View All Cookies</a><br>
     <a href="/clear-cookies">Clear Cookies</a>
   `);
@@ -84,6 +87,7 @@ app.post('/login', async (req, res) => {
           <input type="password" name="password" placeholder="Password" required><br>
           <button type="submit">Login</button>
         </form>
+        <br>
         <a href="/all-cookies">View All Cookies</a><br>
         <a href="/clear-cookies">Clear Cookies</a>
       `);
@@ -102,6 +106,7 @@ app.get('/register', (req, res) => {
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Register</button>
     </form>
+    <br>
     <a href="/all-cookies">View All Cookies</a><br>
     <a href="/clear-cookies">Clear Cookies</a>
   `);
