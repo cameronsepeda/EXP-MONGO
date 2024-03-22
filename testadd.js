@@ -1,10 +1,10 @@
 const { MongoClient } = require("mongodb");
 
 const uri = "mongodb+srv://cameron_sepeda:XZCe95EA1QhAvbu3@cluster0.vep8ki4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const dbName = 'EXP-MONGO'
+const dbName = 'EXP-MONGO';
 
 const express = require('express');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 app.listen(port);
