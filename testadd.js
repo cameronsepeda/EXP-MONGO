@@ -18,8 +18,6 @@ app.get('/', (req, res) => {
       <h1>Welcome to the site!</h1>
       <p>You are authenticated.</p>
       <p>Authentication Cookie Value: ${req.cookies.authenticated}</p>
-      <a href="/all-cookies">View All Cookies</a><br>
-      <a href="/clear-cookies">Clear Cookies</a>
     `);
   } else {
     res.send(`
@@ -31,8 +29,6 @@ app.get('/', (req, res) => {
       <form action="/register" method="POST">
         <button type="submit">Register</button>
       </form>
-      <a href="/all-cookies">View All Cookies</a><br>
-      <a href="/clear-cookies">Clear Cookies</a>
     `);
   }
 });
@@ -47,8 +43,6 @@ app.get('/', (req, res) => {
     <form action="/register" method="POST">
       <button type="submit">Register</button>
     </form>
-    <a href="/all-cookies">View All Cookies</a><br>
-    <a href="/clear-cookies">Clear Cookies</a>
   `);
 });
 
@@ -60,8 +54,6 @@ app.get('/login', (req, res) => {
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Login</button>
     </form>
-    <a href="/all-cookies">View All Cookies</a><br>
-    <a href="/clear-cookies">Clear Cookies</a>
   `);
 });
 
@@ -84,8 +76,6 @@ app.post('/login', async (req, res) => {
           <input type="password" name="password" placeholder="Password" required><br>
           <button type="submit">Login</button>
         </form>
-        <a href="/all-cookies">View All Cookies</a><br>
-        <a href="/clear-cookies">Clear Cookies</a>
       `);
     }
   } catch (error) {
@@ -102,8 +92,6 @@ app.get('/register', (req, res) => {
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Register</button>
     </form>
-    <a href="/all-cookies">View All Cookies</a><br>
-    <a href="/clear-cookies">Clear Cookies</a>
   `);
 });
 
@@ -129,21 +117,4 @@ app.post('/register', async (req, res) => {
     console.error('Error registering user:', error);
     res.status(500).send('Internal Server Error');
   }
-});
-
-app.get('/all-cookies', (req, res) => {
-  res.send(`
-    <h1>All Cookies</h1>
-    <pre>${JSON.stringify(req.cookies, null, 2)}</pre>
-    <a href="/">Go Back</a>
-  `);
-});
-
-app.get('/clear-cookies', (req, res) => {
-  res.clearCookie('authenticated');
-  res.send(`
-    <h1>Cookies Cleared</h1>
-    <p>All cookies have been cleared/reset.</p>
-    <a href="/">Go Back to Default Route</a>
-  `);
 });
