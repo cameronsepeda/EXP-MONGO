@@ -12,16 +12,28 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use((req, res, next) => {
-  // Exclude certain routes from redirection
-  if (req.path === '/' || req.path === '/login' || req.path === '/register') {
-    next();
-  } else if (req.cookies && req.cookies.authenticated) {
-    // If authenticated, continue to the next middleware
-    next();
+app.get('/', (req, res) => {
+  if (req.cookies && req.cookies.authenticated) {
+    res.send(`
+      <h1>Welcome to the site!</h1>
+      <p>You are authenticated.</p>
+      <p>Authentication Cookie Value: ${req.cookies.authenticated}</p>
+      <a href="/all-cookies">View All Cookies</a><br>
+      <a href="/clear-cookies">Clear Cookies</a>
+    `);
   } else {
-    // If not authenticated, redirect to the default route
-    res.redirect('/');
+    res.send(`
+      <h1>Welcome to the site!</h1>
+      <p>Please login or register</p>
+      <form action="/login" method="POST">
+        <button type="submit">Login</button>
+      </form>
+      <form action="/register" method="POST">
+        <button type="submit">Register</button>
+      </form>
+      <a href="/all-cookies">View All Cookies</a><br>
+      <a href="/clear-cookies">Clear Cookies</a>
+    `);
   }
 });
 
@@ -35,6 +47,8 @@ app.get('/', (req, res) => {
     <form action="/register" method="POST">
       <button type="submit">Register</button>
     </form>
+    <a href="/all-cookies">View All Cookies</a><br>
+    <a href="/clear-cookies">Clear Cookies</a>
   `);
 });
 
@@ -46,23 +60,22 @@ app.get('/login', (req, res) => {
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Login</button>
     </form>
+    <a href="/all-cookies">View All Cookies</a><br>
+    <a href="/clear-cookies">Clear Cookies</a>
   `);
 });
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
-  // Check credentials against MongoDB
   try {
     const db = client.db(dbName);
     const usersCollection = db.collection('credentials');
     const user = await usersCollection.findOne({ username, password });
     if (user) {
-      // If user found, set authentication cookie and redirect to default route
       res.cookie('authenticated', true);
       res.redirect('/');
     } else {
-      // If user not found, render login form with error message
       res.send(`
         <h1>Login</h1>
         <p>Invalid username or password. Please try again.</p>
@@ -71,6 +84,8 @@ app.post('/login', async (req, res) => {
           <input type="password" name="password" placeholder="Password" required><br>
           <button type="submit">Login</button>
         </form>
+        <a href="/all-cookies">View All Cookies</a><br>
+        <a href="/clear-cookies">Clear Cookies</a>
       `);
     }
   } catch (error) {
@@ -81,43 +96,54 @@ app.post('/login', async (req, res) => {
 
 app.get('/register', (req, res) => {
   res.send(`
-    <h1>Login</h1>
+    <h1>Register</h1>
     <form action="/register" method="POST">
       <input type="text" name="username" placeholder="Username" required><br>
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Register</button>
     </form>
+    <a href="/all-cookies">View All Cookies</a><br>
+    <a href="/clear-cookies">Clear Cookies</a>
   `);
 });
 
 app.post('/register', async (req, res) => {
-  // Retrieve registration information from the request body
   const { username, password } = req.body;
   
   try {
-    // Connect to the MongoDB database
     await client.connect();
     console.log('Connected to MongoDB');
 
-    // Access the database and collection
     const db = client.db(dbName);
     const usersCollection = db.collection('credentials');
 
-    // Check if the username already exists in the database
     const existingUser = await usersCollection.findOne({ username });
     if (existingUser) {
-      // If username already exists, send a message indicating the conflict
       res.status(409).send('Username already exists. Please choose a different one.');
     } else {
-      // If username does not exist, insert the new user into the database
       await usersCollection.insertOne({ username, password });
-      // Set authentication cookie for the new user
       res.cookie('authenticated', true);
-      // Redirect to the default route
       res.redirect('/');
     }
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).send('Internal Server Error');
   }
+});
+
+app.get('/all-cookies', (req, res) => {
+  res.send(`
+    <h1>All Cookies</h1>
+    <pre>${JSON.stringify(req.cookies, null, 2)}</pre>
+    <a href="/">Go Back</a>
+  `);
+});
+
+app.get('/clear-cookies', (req, res) => {
+  res.clearCookie('authenticated');
+  res.send(`
+    <h1>Cookies Cleared</h1>
+    <p>All cookies have been cleared/reset.</p>
+    <a href="/">Go Back to Default Route</a>
+  `);
 });
