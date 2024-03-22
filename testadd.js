@@ -1,10 +1,9 @@
 const { MongoClient } = require("mongodb");
 
-// The uri string must be the connection string for the database (obtained on Atlas).
 const uri = "mongodb+srv://cameron_sepeda:XZCe95EA1QhAvbu3@cluster0.vep8ki4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
-// --- This is the standard stuff to get it to work on the browser
 const express = require('express');
+const cookieParser = require('cookie-parser')
 const app = express();
 const port = 3000;
 app.listen(port);
@@ -12,12 +11,13 @@ console.log('Server started at http://localhost:' + port);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// routes will go here
+app.get('/', function (req, res) {
+  res.send("You did not send me anything");
+});
 
-// Default route.
-// Provides a selection of routes to go to as links.
-app.get('/', function(req, res) {
+app.get('/start', function(req, res) {
   var outstring = 'Default endpoint starting on date: ' + Date.now();
   outstring += '<p><a href=\"./task1\">Go to Task 1</a>';
   outstring += '<p><a href=\"./task2\">Go to Task 2</a>';
