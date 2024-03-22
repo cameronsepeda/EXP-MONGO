@@ -47,6 +47,8 @@ app.get('/', (req, res) => {
     <form action="/register" method="POST">
       <button type="submit">Register</button>
     </form>
+    <a href="/all-cookies">View All Cookies</a><br>
+    <a href="/clear-cookies">Clear Cookies</a>
   `);
 });
 
@@ -58,6 +60,8 @@ app.get('/login', (req, res) => {
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Login</button>
     </form>
+    <a href="/all-cookies">View All Cookies</a><br>
+    <a href="/clear-cookies">Clear Cookies</a>
   `);
 });
 
@@ -80,6 +84,8 @@ app.post('/login', async (req, res) => {
           <input type="password" name="password" placeholder="Password" required><br>
           <button type="submit">Login</button>
         </form>
+        <a href="/all-cookies">View All Cookies</a><br>
+        <a href="/clear-cookies">Clear Cookies</a>
       `);
     }
   } catch (error) {
@@ -96,6 +102,8 @@ app.get('/register', (req, res) => {
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Register</button>
     </form>
+    <a href="/all-cookies">View All Cookies</a><br>
+    <a href="/clear-cookies">Clear Cookies</a>
   `);
 });
 
