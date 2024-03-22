@@ -15,8 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-  // Check if authentication cookie exists
-  if (req.cookies && req.cookies.authenticated) {
+  // Exclude certain routes from redirection
+  if (req.path === '/' || req.path === '/login' || req.path === '/register') {
+    next();
+  } else if (req.cookies && req.cookies.authenticated) {
     // If authenticated, continue to the next middleware
     next();
   } else {
