@@ -1,15 +1,13 @@
 const { MongoClient } = require("mongodb");
-
 const uri = "mongodb+srv://cameron_sepeda:XZCe95EA1QhAvbu3@cluster0.vep8ki4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const dbName = 'EXP-MONGO';
-
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
 app.listen(port);
 console.log('Server started at http://localhost:' + port);
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -44,7 +42,7 @@ app.post('/login', async (req, res) => {
   // Check credentials against MongoDB
   try {
     const db = client.db(dbName);
-    const usersCollection = db.collection('users');
+    const usersCollection = db.collection('credentials');
     const user = await usersCollection.findOne({ username, password });
     if (user) {
       // If user found, set authentication cookie and redirect to default route
@@ -91,7 +89,7 @@ app.post('/register', (req, res) => {
 
 app.get('/', (req, res) => {
   res.send(`
-    <h1>Welcome!</h1>
+    <h1>Welcome to the site!</h1>
     <p>Please login or register</p>
     <form action="/login" method="POST">
       <button type="submit">Login</button>
