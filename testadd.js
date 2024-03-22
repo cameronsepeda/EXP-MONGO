@@ -13,6 +13,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+  // Check if authentication cookie exists
+  if (req.cookies && req.cookies.authenticated) {
+    // If authenticated, continue to the next middleware
+    next();
+  } else {
+    // If not authenticated, send an error response
+    res.status(401).send('No Authentication Cookie');
+  }
+});
+
 app.get('/', function(req, res) {
   var outstring = 'Default endpoint starting on date: ' + Date.now();
   outstring += '<p><a href=\"./task1\">Go to Task 1</a>';
