@@ -13,11 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get('/', function (req, res) {
-  res.send("You did not send me anything");
-});
-
-app.get('/start', function(req, res) {
+app.get('/', function(req, res) {
   var outstring = 'Default endpoint starting on date: ' + Date.now();
   outstring += '<p><a href=\"./task1\">Go to Task 1</a>';
   outstring += '<p><a href=\"./task2\">Go to Task 2</a>';
