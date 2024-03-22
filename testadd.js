@@ -18,6 +18,8 @@ app.get('/', (req, res) => {
       <h1>Welcome to the site!</h1>
       <p>You are authenticated.</p>
       <p>Authentication Cookie Value: ${req.cookies.authenticated}</p>
+      <a href="/all-cookies">View All Cookies</a><br>
+      <a href="/clear-cookies">Clear Cookies</a>
     `);
   } else {
     res.send(`
@@ -29,6 +31,8 @@ app.get('/', (req, res) => {
       <form action="/register" method="POST">
         <button type="submit">Register</button>
       </form>
+      <a href="/all-cookies">View All Cookies</a><br>
+      <a href="/clear-cookies">Clear Cookies</a>
     `);
   }
 });
