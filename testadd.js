@@ -118,3 +118,20 @@ app.post('/register', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+app.get('/all-cookies', (req, res) => {
+  res.send(`
+    <h1>All Cookies</h1>
+    <pre>${JSON.stringify(req.cookies, null, 2)}</pre>
+    <a href="/">Go Back</a>
+  `);
+});
+
+app.get('/clear-cookies', (req, res) => {
+  res.clearCookie('authenticated');
+  res.send(`
+    <h1>Cookies Cleared</h1>
+    <p>All cookies have been cleared/reset.</p>
+    <a href="/">Go Back to Default Route</a>
+  `);
+});
