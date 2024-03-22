@@ -4,6 +4,7 @@ const uri = "mongodb+srv://cameron_sepeda:XZCe95EA1QhAvbu3@cluster0.vep8ki4.mong
 
 const express = require('express');
 const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 app.listen(port);
@@ -12,15 +13,54 @@ console.log('Server started at http://localhost:' + port);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
-  // Check if authentication cookie exists
   if (req.cookies && req.cookies.authenticated) {
-    // If authenticated, continue to the next middleware
     next();
   } else {
-    // If not authenticated, send an error response
-    res.status(401).send('No Authentication Cookie');
+    res.send(`
+      <h1>Welcome!</h1>
+      <p>Please login or register</p>
+      <form action="/login" method="POST">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+      <form action="/register" method="POST">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Register</button>
+      </form>
+    `);
+  }
+});
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  // Simulated login logic: Check if the user exists and password matches
+  const user = users.find(user => user.username === username && user.password === password);
+  if (user) {
+    // For demonstration purposes, simply set an authentication cookie
+    res.cookie('authenticated', true);
+    res.redirect('/');
+  } else {
+    res.status(401).send('Invalid username or password');
+  }
+});
+
+app.post('/register', (req, res) => {
+  const { username, password } = req.body;
+  // Simulated registration logic: Check if username is available and store new user
+  const existingUser = users.find(user => user.username === username);
+  if (existingUser) {
+    res.status(400).send('Username already exists');
+  } else {
+    // Store the new user
+    users.push({ username, password });
+    // For demonstration purposes, simply set an authentication cookie
+    res.cookie('authenticated', true);
+    res.redirect('/');
   }
 });
 
