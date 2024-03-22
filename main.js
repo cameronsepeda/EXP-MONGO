@@ -5,8 +5,12 @@ const uri = "mongodb+srv://cameron_sepeda:XZCe95EA1QhAvbu3@cluster0.vep8ki4.mong
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-
 const app = express();
+const port = 3000;
+app.listen(port);
+console.log('Server started at http://localhost:' + port);
+
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
