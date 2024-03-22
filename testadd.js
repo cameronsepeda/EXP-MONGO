@@ -25,6 +25,19 @@ app.use((req, res, next) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send(`
+    <h1>Welcome to the site!</h1>
+    <p>Please login or register</p>
+    <form action="/login" method="POST">
+      <button type="submit">Login</button>
+    </form>
+    <form action="/register" method="POST">
+      <button type="submit">Register</button>
+    </form>
+  `);
+});
+
 app.get('/login', (req, res) => {
   res.send(`
     <h1>Login</h1>
@@ -68,7 +81,7 @@ app.post('/login', async (req, res) => {
 
 app.get('/register', (req, res) => {
   res.send(`
-    <h1>Register</h1>
+    <h1>Login</h1>
     <form action="/register" method="POST">
       <input type="text" name="username" placeholder="Username" required><br>
       <input type="password" name="password" placeholder="Password" required><br>
@@ -107,17 +120,4 @@ app.post('/register', async (req, res) => {
     console.error('Error registering user:', error);
     res.status(500).send('Internal Server Error');
   }
-});
-
-app.get('/', (req, res) => {
-  res.send(`
-    <h1>Welcome to the site!</h1>
-    <p>Please login or register</p>
-    <form action="/login" method="POST">
-      <button type="submit">Login</button>
-    </form>
-    <form action="/register" method="POST">
-      <button type="submit">Register</button>
-    </form>
-  `);
 });
